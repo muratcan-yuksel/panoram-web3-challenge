@@ -2,13 +2,15 @@
 
 pragma solidity ^0.8.0;
 import "./Helper.sol";
+import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 
-contract User {
+contract User is Initializable {
     address public owner;
     uint public value;
     address public proxyAddress;
 
-    constructor() {
+    // constructor() {
+    function initialize() public initializer {
         owner = msg.sender;
     }
 
@@ -21,7 +23,7 @@ contract User {
         value += msg.value;
     }
 
-    //delete this function: User shouldn't be able to send his own contract money
+    //might use this function so that only the user can use this very function to send money to his own contract
     // function deposit() public payable onlyOwner {
     //     value += msg.value;
     // }
