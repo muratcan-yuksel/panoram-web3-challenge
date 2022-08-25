@@ -1,10 +1,12 @@
 //SPDX-License-Identifier:MIT
 
 pragma solidity ^0.8.0;
+import "./Helper.sol";
 
 contract User {
     address public owner;
     uint public value;
+    address public proxyAddress;
 
     constructor() {
         owner = msg.sender;
@@ -19,7 +21,7 @@ contract User {
         value += msg.value;
     }
 
-    function receive() public payable onlyOwner {
+    function deposit() public payable onlyOwner {
         value += msg.value;
     }
 
@@ -31,5 +33,17 @@ contract User {
 
     function balance() public view returns (uint) {
         return address(this).balance;
+    }
+
+    function callCreateStorage(address _helper) public {
+        Helper(_helper).createStorage();
+    }
+
+    function callReturnAddress(address _helper) public {
+        Helper(_helper).returnAddress();
+    }
+
+    function getProxyAddress(address _proxyAdress) public {
+        proxyAddress = _proxyAdress;
     }
 }
