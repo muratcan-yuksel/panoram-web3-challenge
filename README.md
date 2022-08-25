@@ -32,6 +32,8 @@ This should be the behavior of the project if I managed to implement it correctl
 
 Now due to some problems I've faced in writing the code, each time a new user wants to enter the system, s/he needs to point to the helper contract. I think I could've figured that out had I had more time.
 
+I worked with hardhat testing a bit, but couldn't continue as it was taking way too much time- but without testing itself, it even took more time. I need to work on hardhat more. Unfortunately, this challenge caught me before I had the opportunity to work on the hardhat section on Patrick Collins' web3 course :)
+
 Other than that, the project should comply with the requirements as much as it can.
 
 Hope you like it. Cheers.
