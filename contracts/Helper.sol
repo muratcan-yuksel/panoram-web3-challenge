@@ -20,7 +20,7 @@ contract Helper {
         createdProxy = proxy;
         User(implementation).getProxyAddress(createdProxy);
         //this function might initialize the proxy contract
-        User(createdProxy).initialize();
+        //  User(createdProxy).initialize();
 
         return proxy;
     }

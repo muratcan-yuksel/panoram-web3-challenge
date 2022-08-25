@@ -1,0 +1,56 @@
+{
+  "manifestVersion": "3.2",
+  "proxies": [],
+  "impls": {
+    "cd6f217f179951950d2b318a95200f90dc2d91157fc90adcf2ff1de9d5df5991": {
+      "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "txHash": "0xc6f6fd5a2073f10179548d7599294f36648358169597c20721ca0bc047c387e8",
+      "layout": {
+        "storage": [
+          {
+            "label": "contractOwner",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address",
+            "contract": "User",
+            "src": "contracts/User.sol:9"
+          },
+          {
+            "label": "value",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256",
+            "contract": "User",
+            "src": "contracts/User.sol:10"
+          },
+          {
+            "label": "proxyAddress",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_address",
+            "contract": "User",
+            "src": "contracts/User.sol:11"
+          },
+          {
+            "label": "currentLevel",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256",
+            "contract": "User",
+            "src": "contracts/User.sol:12"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        }
+      }
+    }
+  }
+}

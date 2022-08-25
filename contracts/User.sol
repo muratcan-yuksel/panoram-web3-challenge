@@ -9,30 +9,21 @@ contract User is Initializable, Ownable {
     address public contractOwner;
     uint public value;
     address public proxyAddress;
+    uint256 public currentLevel;
 
     // constructor() {
     function initialize() public initializer {
         //  owner = msg.sender;
+        currentLevel = 1;
     }
 
-    // modifier onlyOwner() {
-    //     require(msg.sender == owner);
-    //     _;
-    // }
-    //seems unnecessary now
-    // modifier notOwner() {
-    //     require(msg.sender != contractOwner);
-    //     _;
-    // }
+    function returnLevel() public view returns (uint256) {
+        return currentLevel;
+    }
 
     function fund() public payable {
         value += msg.value;
     }
-
-    //might use this function so that only the user can use this very function to send money to his own contract
-    // function deposit() public payable onlyOwner {
-    //     value += msg.value;
-    // }
 
     function withdraw(uint amount) public onlyOwner {
         require(amount <= value);
