@@ -21,9 +21,10 @@ contract User {
         value += msg.value;
     }
 
-    function deposit() public payable onlyOwner {
-        value += msg.value;
-    }
+    //delete this function: User shouldn't be able to send his own contract money
+    // function deposit() public payable onlyOwner {
+    //     value += msg.value;
+    // }
 
     function withdraw(uint amount) public onlyOwner {
         require(amount <= value);
@@ -44,6 +45,8 @@ contract User {
     // }
 
     //get the address of the created proxy contract
+    //this function is called from the Helper.sol contract
+    //will add this address into an array of proxy addresses
     function getProxyAddress(address _proxyAdress) public {
         proxyAddress = _proxyAdress;
     }
