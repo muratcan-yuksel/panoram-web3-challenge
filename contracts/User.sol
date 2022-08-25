@@ -39,10 +39,11 @@ contract User {
         Helper(_helper).createStorage();
     }
 
-    function callReturnAddress(address _helper) public {
-        Helper(_helper).returnAddress();
-    }
+    // function callReturnAddress(address _helper) public {
+    //     Helper(_helper).returnAddress();
+    // }
 
+    //get the address of the created proxy contract
     function getProxyAddress(address _proxyAdress) public {
         proxyAddress = _proxyAdress;
     }

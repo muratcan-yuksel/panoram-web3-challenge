@@ -7,16 +7,19 @@ import "./User.sol";
 
 contract Helper {
     address public implementation;
-    address public proxyAddress;
+    address public createdProxy;
 
     constructor(address _implementation) {
         implementation = _implementation;
     }
 
     function createStorage() public returns (address) {
-        address proxy = clone(implementation);
+        //how to call openzeppelin? maybe like this?
+        // address proxy = clone(implementation);
+        address proxy = Clones.clone(implementation);
         createdProxy = proxy;
         User(implementation).getProxyAddress(createdProxy);
+
         return proxy;
     }
 
