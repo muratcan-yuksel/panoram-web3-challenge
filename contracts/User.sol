@@ -13,12 +13,14 @@ contract User is Initializable, Ownable {
     uint256 public currentLevel;
     uint256 public userCount;
     address[] public usersArray;
+    uint256 fundPriceInWei;
 
     // constructor() {
     function initialize() public initializer {
         //  owner = msg.sender;
         currentLevel = 1;
         userCount = 0;
+        fundPriceInWei = 44607301010845152.0000;
     }
 
     modifier userCountIsLessThanNine() {
@@ -40,11 +42,27 @@ contract User is Initializable, Ownable {
     }
 
     function fund() public payable userCountIsLessThanNine {
-        value += msg.value;
+        require(msg.value == fundPriceInWei);
+        //vault address will be passed here
+        payFeeToVault();
+        // value += msg.value;
         userCount++;
     }
 
+    function payFeeToVault(address _vault) internal {
+        if (userCount % 3 == 0) {
+            Vault(_vault).deposit{value: fundPriceInWei / 2}();
+            value += fundPriceInWei / 2;
+        }
+        //else part doesn't work
+        else {
+            Vault(_vault).deposit{value: (fundPriceInWei / 100) * 30}();
+            value += (fundPriceInWei / 100) * 70;
+        }
+    }
+
     //add a deposit function for the owner
+    //because levelUp function takes money from the contract balance
     function levelUp(address _vault) public onlyOwner userCountIsNine maxLevel {
         Vault(_vault).deposit{value: 1e18 / 2}();
         currentLevel++;
