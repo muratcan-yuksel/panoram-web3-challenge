@@ -2,6 +2,7 @@
 
 pragma solidity ^0.8.0;
 import "./Helper.sol";
+import "./Vault.sol";
 import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
@@ -43,9 +44,12 @@ contract User is Initializable, Ownable {
         userCount++;
     }
 
-    function levelUp() public onlyOwner userCountIsNine maxLevel {
+    //add a deposit function for the owner
+    function levelUp(address _vault) public onlyOwner userCountIsNine maxLevel {
+        Vault(_vault).deposit{value: 1e18 / 2}();
         currentLevel++;
         userCount = 0;
+        value -= 1e18 / 2;
     }
 
     function withdraw(uint amount) public onlyOwner {
