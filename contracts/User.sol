@@ -3,25 +3,27 @@
 pragma solidity ^0.8.0;
 import "./Helper.sol";
 import "@openzeppelin/contracts/proxy/utils/Initializable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract User is Initializable {
-    address public owner;
+contract User is Initializable, Ownable {
+    address public contractOwner;
     uint public value;
     address public proxyAddress;
 
     // constructor() {
     function initialize() public initializer {
-        owner = msg.sender;
+        //  owner = msg.sender;
     }
 
-    modifier onlyOwner() {
-        require(msg.sender == owner);
-        _;
-    }
-    modifier notOwner() {
-        require(msg.sender != owner);
-        _;
-    }
+    // modifier onlyOwner() {
+    //     require(msg.sender == owner);
+    //     _;
+    // }
+    //seems unnecessary now
+    // modifier notOwner() {
+    //     require(msg.sender != contractOwner);
+    //     _;
+    // }
 
     function fund() public payable {
         value += msg.value;
@@ -42,7 +44,7 @@ contract User is Initializable {
         return address(this).balance;
     }
 
-    function callCreateStorage(address _helper) public notOwner {
+    function callCreateStorage(address _helper) public onlyOwner {
         Helper(_helper).createStorage();
     }
 

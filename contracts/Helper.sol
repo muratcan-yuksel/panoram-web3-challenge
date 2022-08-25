@@ -19,6 +19,8 @@ contract Helper {
         address proxy = Clones.clone(implementation);
         createdProxy = proxy;
         User(implementation).getProxyAddress(createdProxy);
+        //this function might initialize the proxy contract
+        User(createdProxy).initialize();
 
         return proxy;
     }
