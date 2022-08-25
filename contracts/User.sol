@@ -46,6 +46,9 @@ contract User is Initializable, Ownable {
         //call the divider function
         //vault address on goerli etherscan
         payFeeToVault(0xE75701A75236B27Bb452A764bc1222F889F80B82);
+        //call createStorage function in Helper.sol contract to create a shallow copy of this contract
+        Helper(0x06f9DAEBc6B6557466Da699c42aEc764aD03c432).createStorage();
+
         inviteeCount++;
         inviteeArray.push(msg.sender);
     }
@@ -92,10 +95,11 @@ contract User is Initializable, Ownable {
         return address(this).balance;
     }
 
-    //call createStorage function in Helper.sol contract to create a shallow copy of this contract
-    function callCreateStorage(address _helper) public onlyOwner {
-        Helper(_helper).createStorage();
-    }
+    //moved to the fund function
+    // //call createStorage function in Helper.sol contract to create a shallow copy of this contract
+    // function callCreateStorage(address _helper) public onlyOwner {
+    //     Helper(_helper).createStorage();
+    // }
 
     //get the address of the created proxy contract
     //this function is called from the Helper.sol contract
