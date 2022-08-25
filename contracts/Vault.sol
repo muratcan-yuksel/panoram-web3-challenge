@@ -15,7 +15,12 @@ contract Vault {
         _;
     }
 
-    function deposit() public payable {
+    modifier priceRequired() {
+        require(msg.value == 1e18 / 2);
+        _;
+    }
+
+    function deposit() public payable priceRequired {
         value += msg.value;
     }
 
