@@ -10,19 +10,38 @@ contract User is Initializable, Ownable {
     uint public value;
     address public proxyAddress;
     uint256 public currentLevel;
+    uint256 public userCount;
+    address[] public usersArray;
 
     // constructor() {
     function initialize() public initializer {
         //  owner = msg.sender;
         currentLevel = 1;
+        userCount = 0;
+    }
+
+    modifier userCountIsLessThanNine() {
+        require(userCount < 9);
+        _;
+    }
+
+    modifier userCountIsNine() {
+        require(userCount == 9);
+        _;
     }
 
     function returnLevel() public view returns (uint256) {
         return currentLevel;
     }
 
-    function fund() public payable {
+    function fund() public payable userCountIsLessThanNine {
         value += msg.value;
+        userCount++;
+    }
+
+    function levelUp() public onlyOwner userCountIsNine {
+        currentLevel++;
+        userCount = 0;
     }
 
     function withdraw(uint amount) public onlyOwner {
