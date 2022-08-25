@@ -18,8 +18,12 @@ contract User is Initializable {
         require(msg.sender == owner);
         _;
     }
+    modifier notOwner() {
+        require(msg.sender != owner);
+        _;
+    }
 
-    function receive() public payable {
+    function fund() public payable {
         value += msg.value;
     }
 
@@ -38,7 +42,7 @@ contract User is Initializable {
         return address(this).balance;
     }
 
-    function callCreateStorage(address _helper) public {
+    function callCreateStorage(address _helper) public notOwner {
         Helper(_helper).createStorage();
     }
 
