@@ -11,25 +11,24 @@ contract User is Initializable, Ownable {
     uint public value;
     address public proxyAddress;
     uint256 public currentLevel;
-    uint256 public userCount;
-    address[] public usersArray;
-    uint256 fundPriceInWei;
+    uint256 public inviteeCount;
+    address[] public inviteeArray;
+    //use constant to save some gas
+    uint256 public constant FUND_PRICE_IN_WEI = 44607301010845152.0000;
 
-    // constructor() {
+    // constructor
     function initialize() public initializer {
-        //  owner = msg.sender;
         currentLevel = 1;
-        userCount = 0;
-        fundPriceInWei = 44607301010845152.0000;
+        inviteeCount = 0;
     }
 
-    modifier userCountIsLessThanNine() {
-        require(userCount < 9);
+    modifier inviteeCountIsLessThanNine() {
+        require(inviteeCount < 9);
         _;
     }
 
-    modifier userCountIsNine() {
-        require(userCount == 9);
+    modifier inviteeCountIsNine() {
+        require(inviteeCount == 9);
         _;
     }
     modifier maxLevel() {
@@ -41,32 +40,45 @@ contract User is Initializable, Ownable {
         return currentLevel;
     }
 
-    function fund() public payable userCountIsLessThanNine {
-        require(msg.value == fundPriceInWei);
-        //vault address will be passed here
-        payFeeToVault();
-        // value += msg.value;
-        userCount++;
+    //invitees need to call this function and pay 0.25 BSC
+    function fund() public payable inviteeCountIsLessThanNine {
+        require(msg.value == FUND_PRICE_IN_WEI);
+        //call the divider function
+        //vault address on goerli etherscan
+        payFeeToVault(0xE75701A75236B27Bb452A764bc1222F889F80B82);
+        inviteeCount++;
+        inviteeArray.push(msg.sender);
     }
 
+    //divider function, changes the amount of the user and the vault receives in every 3 invitee
     function payFeeToVault(address _vault) internal {
-        if (userCount % 3 == 0) {
-            Vault(_vault).deposit{value: fundPriceInWei / 2}();
-            value += fundPriceInWei / 2;
-        }
-        //else part doesn't work
-        else {
-            Vault(_vault).deposit{value: (fundPriceInWei / 100) * 30}();
-            value += (fundPriceInWei / 100) * 70;
+        if (inviteeCount % 3 == 0) {
+            Vault(_vault).deposit{value: FUND_PRICE_IN_WEI / 2}();
+            value += FUND_PRICE_IN_WEI / 2;
+        } else {
+            Vault(_vault).deposit{value: (FUND_PRICE_IN_WEI / 100) * 30}();
+            value += (FUND_PRICE_IN_WEI / 100) * 70;
         }
     }
 
     //add a deposit function for the owner
     //because levelUp function takes money from the contract balance
-    function levelUp(address _vault) public onlyOwner userCountIsNine maxLevel {
+    //so the user might want to add some money to the contract
+    function deposit() public payable onlyOwner {
+        value += msg.value;
+    }
+
+    //once the invitee count reaches 9, the user has to pay half and ether to the vault to level up
+    //with maxLevel modifier, the user can't level up more than 10
+    function levelUp(address _vault)
+        public
+        onlyOwner
+        inviteeCountIsNine
+        maxLevel
+    {
         Vault(_vault).deposit{value: 1e18 / 2}();
         currentLevel++;
-        userCount = 0;
+        inviteeCount = 0;
         value -= 1e18 / 2;
     }
 
@@ -80,13 +92,10 @@ contract User is Initializable, Ownable {
         return address(this).balance;
     }
 
+    //call createStorage function in Helper.sol contract to create a shallow copy of this contract
     function callCreateStorage(address _helper) public onlyOwner {
         Helper(_helper).createStorage();
     }
-
-    // function callReturnAddress(address _helper) public {
-    //     Helper(_helper).returnAddress();
-    // }
 
     //get the address of the created proxy contract
     //this function is called from the Helper.sol contract
