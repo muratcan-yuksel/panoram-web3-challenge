@@ -29,6 +29,10 @@ contract User is Initializable, Ownable {
         require(userCount == 9);
         _;
     }
+    modifier maxLevel() {
+        require(currentLevel < 10);
+        _;
+    }
 
     function returnLevel() public view returns (uint256) {
         return currentLevel;
@@ -39,7 +43,7 @@ contract User is Initializable, Ownable {
         userCount++;
     }
 
-    function levelUp() public onlyOwner userCountIsNine {
+    function levelUp() public onlyOwner userCountIsNine maxLevel {
         currentLevel++;
         userCount = 0;
     }
